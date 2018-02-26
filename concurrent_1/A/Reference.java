@@ -21,20 +21,13 @@ public class Reference {
             
             
             
-            h.setName("MyMain");
+            h.setName("MyMainConcurrent");
             
             System.out.println("Number "+i+" "+ h.getName());
             }
         h.sleep(2000);
         }
     }
-    public boolean OddNumber(int x){
-        if(x%2 !=0){
-            return true;
-        }
-        else 
-            return false;
-        
-    }
+   
 }
 

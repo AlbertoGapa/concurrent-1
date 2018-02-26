@@ -15,33 +15,51 @@ import java.util.logging.Logger;
  *
  */
 
-public class Lazy extends Thread{
-
-    public Lazy(){
+public class Lazy extends Thread {
+    int i;
+    
+public Lazy(){
+    i=0;
+}
+public Lazy(int a){
+    i=a;
+}
+    @Override
+    public void run(){
         
         Thread h= Thread.currentThread();
         int x = (int) (Math.floor(Math.random()*(8-2))+2);
         
-
-        for(int i=0;i<x;i++){
         
-            try {
-                h.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Lazy.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            int y = (int) (Math.floor(Math.random()*(3-1))+1);
+        
+
+        while(i<x && ! h.isInterrupted()){
+        
             
-            switch(y){
-                case 1: System.out.println("I am dressing up…");
-                break;
-                
-                case 2: System.out.println("“Just a sec, please…");
-                break;
-                
-                case 3: System.out.println("These clothes do not suit me…");
+            
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                h.interrupt();
                 break;
             }
+               
+                
+                    
+                i++;
+                int y = (int) (Math.floor(Math.random()*(3-1))+1);
+                
+                switch(y){
+                    case 1: System.out.println("I am dressing up…");
+                    break;
+                    
+                    case 2: System.out.println("“Just a sec, please…");
+                    break;
+                    
+                    case 3: System.out.println("These clothes do not suit me…");
+                    break;
+                }
+            
             
             
             
@@ -49,10 +67,16 @@ public class Lazy extends Thread{
             
             
         }
-        if(h.isInterrupted())
-            System.out.println("That’s not cricket, please play the game!”");
-        else 
+        
+        if(x<=i)
             System.out.println("I am ready, the early bird catches the worm!");
-    }
+    
+  
+        if(h.isInterrupted())        
+                System.out.println("That’s not cricket, please play the game!”");
+                
+                
+            }
 
 }
+

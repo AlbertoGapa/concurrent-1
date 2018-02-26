@@ -1,4 +1,8 @@
 package concurrent_1.D;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Hurry must:
  * - Be the main thread
@@ -14,28 +18,45 @@ package concurrent_1.D;
 
 public class Hurry extends Thread {
     
-    public Hurry() throws InterruptedException{
-    Thread h=Thread.currentThread();
     Lazy Tl = new Lazy();
+    
+    
+    @Override
+    public void run() {
+    Thread h=Thread.currentThread();
+    
+    Tl.start();
     int i =0;
     
     while(Tl.isAlive() ==true){
-    Tl.join(1000);
+        try {
+            Tl.join(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Hurry.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.out.println("Aren`t you ready yet");
         
         i++;
-        if(5<=i){
+    
+        if(i==5){
             System.out.println("You are reting in your laurels... and I am leaving!");
+            
             Tl.interrupt();
-            Tl.join();
+            break;
+            
+            //Lazy T11= new Lazy (i);
+            //T11.start();
+            
+
         }
-        
-        
     }
+        
+        
+    
     
     if(i<5)
             System.out.println("At last, a turtle runs rings round you!");
     
-    
     }
-}
+    }
+

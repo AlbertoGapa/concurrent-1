@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  *
  */
 
-public class R_PrintID extends Thread implements Runnable {
+public class R_PrintID  implements Runnable {
     
     Thread h=Thread.currentThread();
         int ID;
@@ -27,9 +27,9 @@ public class R_PrintID extends Thread implements Runnable {
     public void run() {
         for(int i=0; i<10;i++){
             System.out.println(this.ID);
-            long x= (long) Math.random();
+            double x=  Math.random();
             try {
-                h.sleep( x);
+                h.sleep((long) x);
             } catch (InterruptedException ex) {
                 Logger.getLogger(R_PrintID.class.getName()).log(Level.SEVERE, null, ex);
             }

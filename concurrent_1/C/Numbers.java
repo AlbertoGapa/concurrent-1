@@ -10,17 +10,17 @@ package concurrent_1.C;
  *
  */
 
-public class Numbers {
+public class Numbers   {
     public Numbers() throws InterruptedException{
-        R_PrintID a = new R_PrintID(1);
-        a.run();
-        R_PrintID b = new R_PrintID(2);
-        b.run();
-        R_PrintID c = new R_PrintID(3);
-        c.run();
-        R_PrintID d = new R_PrintID(4);
-        d.run();
-        R_PrintID e = new R_PrintID(5);
-        e.run();
+        Thread a =new Thread(new R_PrintID(1));
+        a.start();
+        Thread b =new Thread(new R_PrintID(2));
+        b.start();
+        Thread c =new Thread(new R_PrintID(3));
+        c.start();
+        Thread d =new Thread(new R_PrintID(4));
+        d.start();
+        Thread e =new Thread(new R_PrintID(5));
+        e.start();
     }
 }

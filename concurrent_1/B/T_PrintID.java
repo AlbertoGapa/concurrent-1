@@ -10,8 +10,8 @@ package concurrent_1.B;
 
 public class T_PrintID extends Thread {
 
-    Thread h=Thread.currentThread();
-    int ID;
+   Thread h=Thread.currentThread();
+        int ID;
     public T_PrintID(){
         ID=0;
     }
@@ -20,9 +20,11 @@ public class T_PrintID extends Thread {
     }
     
     @Override
-    public void run(){
+    public void run() {
         for(int i=0; i<10;i++){
             System.out.println(this.ID);
+
+            
         }
     }
 }

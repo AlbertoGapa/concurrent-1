@@ -12,14 +12,14 @@ public class Numbers {
 
     public Numbers(){
         T_PrintID a = new T_PrintID(1);
-        a.run();
+        a.start();
         T_PrintID b = new T_PrintID(2);
-        b.run();
+        b.start();
         T_PrintID c = new T_PrintID(3);
-        c.run();
+        c.start();
         T_PrintID d = new T_PrintID(4);
-        d.run();
+        d.start();
         T_PrintID e = new T_PrintID(5);
-        e.run();
+        e.start();
     }
 }
