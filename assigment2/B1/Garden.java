@@ -93,17 +93,32 @@ class Counter {
 
     int value=0;
     NumberCanvas display;
+    volatile boolean [] wantIncrement={false,false};
+    volatile int turn=0;
 
     Counter(NumberCanvas n) {
         display=n;
         display.setvalue(value);
     }
 
-    void increment() {
+    void increment(int ID) {
+      wantIncrement[ID]=true;
+          
+      while(wantIncrement[1-ID]){
+          
+          if (turn==1-ID){
+              wantIncrement[ID]=false;
+              while(turn==1-ID);
+              wantIncrement[ID]=true;
+          }
+      }
         int temp = value;   //read[v]
         CC.ForceCC();        
         value=temp+1; //write[v+1]
         display.setvalue(value);
+        
+        turn=1-ID;
+        wantIncrement[ID]=false;
     }
 }
 
@@ -114,8 +129,7 @@ class Turnstile extends Thread {
   NumberCanvas display;
   Counter people;
   int ID;
-  volatile boolean [] wantIncrement={false,false};
-  volatile int turn;
+
 
 
  
@@ -144,27 +158,15 @@ class Turnstile extends Thread {
         //protecting CS
         
         
-        wantIncrement[ID]=true;
-          System.out.println(wantIncrement[1-ID]);
-          System.out.println(1-ID);
-          
-      while(wantIncrement[1-ID]){
-          
-          if (turn==1-ID){
-              wantIncrement[ID]=false;
-              while(turn==1-ID);
-              wantIncrement[ID]=true;
-          }
-      }
+
       
       //CS
       
-        people.increment();
+        people.increment(ID);
         
         //leaving CS
         
-         turn=1-ID;
-      wantIncrement[ID]=false;
+
       }
     } catch (InterruptedException e) {}
   }

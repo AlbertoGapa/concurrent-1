@@ -1,5 +1,5 @@
 
-package concurrent_assignment2.B2;
+package assigment2.B2;
 
 
 /**
@@ -11,6 +11,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.applet.*;
 import java.applet.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Garden extends Applet {
@@ -76,8 +78,8 @@ public class Garden extends Applet {
         
         counter = new Counter(counterD);
        
-        turnstile1= new Turnstile(turn1D,counter);
-        turnstile2= new Turnstile(turn2D,counter);
+        turnstile1= new Turnstile(turn1D,counter,0);
+        turnstile2= new Turnstile(turn2D,counter,1);
         turnstile1.start();
         turnstile2.start();
     }
@@ -88,17 +90,38 @@ class Counter {
 
     int value=0;
     NumberCanvas display;
+    volatile boolean [] wantIncrement={false,false};
+    volatile int turn=0;
 
     Counter(NumberCanvas n) {
         display=n;
         display.setvalue(value);
     }
 
-    void increment() {
+    synchronized void increment(int ID) {
+        
+        wantIncrement[ID]=true;
+          
+      while(wantIncrement[1-ID]){
+          
+          if (turn==1-ID){
+              wantIncrement[ID]=false;
+              try {
+                  wait();
+              } catch (InterruptedException ex) {
+                  
+              }
+              wantIncrement[ID]=true;
+          }
+      }
         int temp = value;   //read[v]
         CC.ForceCC();
         value=temp+1;       //write[v+1]
         display.setvalue(value);
+        notifyAll();
+        
+        wantIncrement[ID]=false;
+        notifyAll();
     }
 }
 
@@ -108,9 +131,11 @@ class Counter {
 class Turnstile extends Thread {
   NumberCanvas display;
   Counter people;
-
-  Turnstile(NumberCanvas n,Counter c)
-    { display = n; people = c; }
+  
+  int ID;
+  
+  Turnstile(NumberCanvas n,Counter c,int x)
+    { display = n; people = c;ID=x; }
 
   public void run() {
     try{
@@ -118,8 +143,11 @@ class Turnstile extends Thread {
       for (int i=1;i<=Garden.MAX;i++){
         Thread.sleep(500); //0.5 second
         display.setvalue(i);
-        people.increment();
+        people.increment(ID);  
       }
+
+        
+
     } catch (InterruptedException e) {}
   }
 }
@@ -131,3 +159,4 @@ class CC {
             
     }
 }
+
